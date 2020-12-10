@@ -1,0 +1,4 @@
+venv
+secret
+.idea
+db.sqlite3
