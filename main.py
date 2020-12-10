@@ -25,7 +25,11 @@ fck capitalism, fck patriarchy, fck racism, fck animal oppression ...
 ########################################################################
 """
 
+
+import argparse
 import os
+
+from modules.program import program_version, program_date
 
 
 def directory_scanner(root):
@@ -69,10 +73,29 @@ def directory_scanner(root):
     return data, summary
 
 
+def _console():
+    """Arguments for control via the console.
+
+    :return: <class 'argparse.Namespace'>
+    """
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-r', '--root', action='store', help='root directory of the scan')
+    parser.add_argument('-v', '--version', action='version', version='version: {} ({})'.format(
+        program_version, program_date
+    ))
+
+    return parser.parse_args()
+
+
 def main():
     """Main function of the program."""
 
-    data, summary = directory_scanner('/home/anonymous/Pictures/W01f/pass/')
+    args = _console()
+
+    if args.root:
+        data, summary = directory_scanner(args.root)
+        print(summary)
 
 
 if __name__ == '__main__':
