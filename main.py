@@ -25,7 +25,6 @@ fck capitalism, fck patriarchy, fck racism, fck animal oppression ...
 ########################################################################
 """
 
-
 import os
 
 
@@ -33,7 +32,7 @@ def directory_scanner(root):
     """Scans the directory with all subdirectories.
 
     :param root: <str>
-        The root directory from which the scan should start.
+        the root directory from which the scan should start.
     :return: <list>, <dict>
         returns in first position a list containing the directories and
         files. In second position a <dict> with 3 keys (directories,
@@ -45,7 +44,7 @@ def directory_scanner(root):
     files_ix = 0
     total_ix = 0
 
-    for dir_ix, (root, dirs, files) in enumerate(os.walk(root), start=1):
+    for dir_ix, (root, dirs, files) in enumerate(os.walk(root), start=0):
         dirs_ix += 1
         total_ix += 1
         print(root)
