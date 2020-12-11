@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""w01f m00n
+"""m00n
 Copyright (C) 2020 w01f - https://github.com/w01fdev/
 
 This program is free software: you can redistribute it and/or modify

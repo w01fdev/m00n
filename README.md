@@ -1,6 +1,6 @@
-# w01f m00n
+# m00n
 
-w01f m00n is a terminal-based forensic utility. It searches the selected 
+m00n is a terminal-based forensic utility. It searches the selected 
 path recursively for all or specific files and saves them in a csv file.
 
 ## syntax

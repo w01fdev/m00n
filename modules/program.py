@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""w01f m00n
+"""m00n
 Copyright (C) 2020 w01f - https://github.com/w01fdev/
 
 This program is free software: you can redistribute it and/or modify
@@ -27,7 +27,7 @@ fck capitalism, fck patriarchy, fck racism, fck animal oppression ...
 
 
 # constants
-program_name = 'w01f m00n'
+program_name = 'm00n'
 program_website = 'https://github.com/w01fdev/m00n'
 program_date = '2020-12-11'
-program_version = '0.0.8'
+program_version = '0.0.9'
