@@ -33,6 +33,89 @@ import os
 from modules.program import program_version, program_date
 
 
+class DirectoryScanner:
+    """Forensic search for directories and files on the hard drive."""
+
+    def __init__(self, root):
+        """Initalisation of the class.
+
+        :param root: <str>
+            the root directory from which the scan should start.
+        """
+
+        self._root = root
+        self._data = []
+
+        # counter
+        self._dirs_ix = 0
+        self._files_ix = 0
+
+    def get_data(self):
+        """Returns the collected data.
+
+        :return: <list>
+        """
+
+        return self._data
+
+    def get_directory_counter(self):
+        """Returns the directory counter.
+
+        :return: <int>
+        """
+
+        return self._dirs_ix
+
+    def get_files_counter(self):
+        """Returns the files counter.
+
+        :return: <int>
+        """
+
+        return self._files_ix
+
+    def get_total_counter(self):
+        """Returns the complete counter (directories + files)
+
+        :return: <int>
+        """
+
+        return self._dirs_ix + self._files_ix
+
+    def get_all_counters(self):
+        """Returns all counters in a list (total, directories, files).
+
+        :return: <list>
+        """
+
+        return self.get_total_counter(), self.get_directory_counter(), self.get_files_counter()
+
+    def run(self):
+        """Starts a forensic scan and returns the data as <dict> in a <list>.
+
+        :return: <list>
+        """
+
+        for self._dir_ix, (root, dirs, files) in enumerate(os.walk(self._root)):
+            self._dirs_ix += 1
+            self._data.append({'path': root})
+            print(root)
+
+            for filename in files:
+                self._files_ix += 1
+                path = os.path.join(root, filename)
+                self._data.append({'path': path})
+                print(path)
+        else:
+            self._print_scan_results()
+            return self._data
+
+    def _print_scan_results(self):
+        """Outputs a small text-based statistic of the result."""
+
+        print('\nscan executed: total: {:,} | directories: {:,} | files: {:,}'.format(*self.get_all_counters()))
+
+
 def csv_writer(file, data):
     """Write the data in a file.
 
@@ -50,47 +133,6 @@ def csv_writer(file, data):
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(data)
-
-
-def directory_scanner(root):
-    """Scans the directory with all subdirectories.
-
-    :param root: <str>
-        the root directory from which the scan should start.
-    :return: <list>, <dict>
-        returns in first position a list containing the directories and
-        files. In second position a <dict> with 3 keys (directories,
-        files, total)
-    """
-
-    data = []
-    dirs_ix = 0
-    files_ix = 0
-    total_ix = 0
-
-    for dir_ix, (root, dirs, files) in enumerate(os.walk(root), start=0):
-        dirs_ix += 1
-        total_ix += 1
-        print(root)
-        data.append({'path': root})
-
-        for filename in files:
-            files_ix += 1
-            total_ix += 1
-            path = os.path.join(root, filename)
-            print(path)
-            data.append({'path': path})
-    else:
-        summary = {
-            'directories': dirs_ix,
-            'files': files_ix,
-            'total': total_ix,
-        }
-        print('\nscan executed: total: {:,} | directories: {:,} | files: {:,}'.format(
-            summary.get('total'), summary.get('directories'), summary.get('files'))
-        )
-
-    return data, summary
 
 
 def _console():
@@ -115,7 +157,8 @@ def main():
     args = _console()
 
     if args.root and args.file:
-        data, summary = directory_scanner(args.root)
+        scan = DirectoryScanner(args.root)
+        data = scan.run()
         csv_writer(args.file, data)
 
 
