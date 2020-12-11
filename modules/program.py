@@ -29,5 +29,5 @@ fck capitalism, fck patriarchy, fck racism, fck animal oppression ...
 # constants
 program_name = 'w01f m00n'
 program_website = 'https://github.com/w01fdev/m00n'
-program_date = '2020-12-10'
-program_version = '0.0.5'
+program_date = '2020-12-11'
+program_version = '0.0.6'

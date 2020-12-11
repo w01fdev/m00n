@@ -27,9 +27,29 @@ fck capitalism, fck patriarchy, fck racism, fck animal oppression ...
 
 
 import argparse
+import csv
 import os
 
 from modules.program import program_version, program_date
+
+
+def csv_writer(file, data):
+    """Write the data in a file.
+
+    :param file: <str>
+        filename in which the data is to be saved as <.csv>.
+        examples:
+            <'data.csv'>
+            <'/home/user/m00n/data.csv'>
+    :param data: <list>
+        a list of <dicts> with data from the <directory_scanner>.
+    """
+
+    with open(file, 'w', newline='') as csv_file:
+        fieldnames = ['path', ]
+        writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(data)
 
 
 def directory_scanner(root):
@@ -52,14 +72,14 @@ def directory_scanner(root):
         dirs_ix += 1
         total_ix += 1
         print(root)
-        data.append(root)
+        data.append({'path': root})
 
         for filename in files:
             files_ix += 1
             total_ix += 1
             path = os.path.join(root, filename)
             print(path)
-            data.append(path)
+            data.append({'path': path})
     else:
         summary = {
             'directories': dirs_ix,
@@ -81,6 +101,7 @@ def _console():
 
     parser = argparse.ArgumentParser()
     parser.add_argument('-r', '--root', action='store', help='root directory of the scan')
+    parser.add_argument('-f', '--file', action='store', help='file into which the scan is to be written')
     parser.add_argument('-v', '--version', action='version', version='version: {} ({})'.format(
         program_version, program_date
     ))
@@ -93,9 +114,9 @@ def main():
 
     args = _console()
 
-    if args.root:
+    if args.root and args.file:
         data, summary = directory_scanner(args.root)
-        print(summary)
+        csv_writer(args.file, data)
 
 
 if __name__ == '__main__':
