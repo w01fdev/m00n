@@ -141,9 +141,9 @@ def _console():
     :return: <class 'argparse.Namespace'>
     """
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-r', '--root', action='store', help='root directory of the scan')
-    parser.add_argument('-f', '--file', action='store', help='file into which the scan is to be written')
+    parser = argparse.ArgumentParser(prog='m00n')
+    parser.add_argument('root', action='store', help='root directory of the scan')
+    parser.add_argument('file', action='store', help='file into which the scan is to be written')
     parser.add_argument('-v', '--version', action='version', version='version: {} ({})'.format(
         program_version, program_date
     ))

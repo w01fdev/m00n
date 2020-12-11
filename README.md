@@ -3,13 +3,17 @@
 w01f m00n is a terminal-based forensic utility. It searches the selected 
 path recursively for all or specific files and saves them in a csv file.
 
+## syntax
+
+python moon [optional args] **root** **file**
+
 ## examples of use
 
 #### save in the program directory:
-python m00n.py -r '/home/user/Pictures/' -f 'data.csv'
+python m00n.py '/home/user/Pictures/' 'data.csv'
 
 #### save with an absolute path:
-python m00n.py -r '/home/user/Pictures/' -f '/home/user/m00n/data.csv'
+python m00n.py '/home/user/Pictures/' '/home/user/m00n/data.csv'
 
 ## The following implementations are planned:
 * selection of what to search | save in the csv file (file size, user, group ...)
