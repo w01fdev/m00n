@@ -183,7 +183,7 @@ class DirectoryScanner:
                             time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(stat.st_atime)),
                             time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(stat.st_mtime)),
                             # size in megabyte
-                            '{:08.2f}'.format(round(stat.st_size / (1024 * 1024), 2)),
+                            '{:09.2f}'.format(stat.st_size / (1024 ** 2)),
                         ]
                     )
 
