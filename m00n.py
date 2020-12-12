@@ -203,11 +203,15 @@ class DirectoryScanner:
         """Currently only mode <paths> implemented. for this reason private."""
 
         if self._mode == 'paths':
-            self._keys = ['path', ]
+            self._keys.append('path')
         elif self._mode == 'stats' or self._mode == 'human':
-            self._keys = ['user_id', 'group_id', 'file_mode',
-                          'device_identifier', 'created', 'last_access',
-                          'last_modified', 'file_size', 'path']
+            self._keys.extend(
+                [
+                    'user_id', 'group_id', 'file_mode', 'device_identifier',
+                    'created', 'last_access', 'last_modified', 'file_size',
+                    'path'
+                ]
+            )
 
 
 def csv_writer(file, data, fieldnames):
