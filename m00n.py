@@ -242,7 +242,6 @@ def main():
     """Main function of the program."""
 
     args = _console()
-    print(args.raw)
 
     if args.root and args.file:
         scan = DirectoryScanner(args.root, raw=args.raw)
