@@ -141,13 +141,15 @@ class DirectoryScanner:
 
         for self._dir_ix, (root, dirs, files) in enumerate(os.walk(self._root)):
             self._dirs_ix += 1
-            self._run_path_processing(root)
             print(root)
 
             for filename in files:
                 self._files_ix += 1
                 path = os.path.join(root, filename)
-                self._run_path_processing(path)
+                try:
+                    self._run_path_processing(path)
+                except FileNotFoundError:
+                    continue
                 print(path)
         else:
             self._output_results()
@@ -254,8 +256,6 @@ def stopwatch(start=None):
         return time.perf_counter() - start
     else:
         return time.perf_counter()
-
-
 
 
 def _console():
