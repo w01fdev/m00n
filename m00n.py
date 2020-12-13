@@ -150,7 +150,7 @@ class DirectoryScanner:
                 self._run_path_processing(path)
                 print(path)
         else:
-            self._scan_results()
+            self._output_results()
             self._output_time()
             return self._data
 
@@ -198,7 +198,7 @@ class DirectoryScanner:
         else:
             raise TypeError('argument must be a <str>')
 
-    def _scan_results(self):
+    def _output_results(self):
         """Outputs a small text-based statistic of the result."""
 
         print('\nscan executed: total: {:,} | directories: {:,} | files: {:,}'.format(*self.get_all_counters()))
