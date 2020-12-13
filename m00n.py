@@ -37,45 +37,32 @@ from modules.program import program_version, program_date
 class DirectoryScanner:
     """Forensic search for directories and files on the hard drive."""
 
-    def __init__(self, root, mode='human'):
+    def __init__(self, root, raw=False):
         """Initalisation of the class.
 
         :param root: <str>
             the root directory from which the scan should start.
-        :param mode: <bool> -> std: <human>
-            If the argument is set to <stats> | <human>, besides the
-            path, further information about the directory or file is
-            collected. this includes time of creation and modification,
-            user and group ... further information in the python
-            documentation under <os.stat>.
+        :param raw: <bool> -> default: <False>
 
-            there are different modes:
-            1. <paths>
-                here only the path is saved without any additional
-                information. this is by far the fastest method.
-            2. <stats>
-                file statistics are requested. these are given in raw
-                form. this means that some of them are not or only with
-                difficulty readable by humans.
-            3. <human>
-                as far as possible, the data is converted into a
-                human-friendly format so that it can be read without
-                the need for further tools. at the same time, however,
-                care is taken to ensure that it can still be easily
-                imported and used in tools such as pandas in order to
-                waste as little code and time as possible in data
-                preparation.
+            if the argument is set to <True>, the data is stored in
+            raw mode. this is sometimes difficult to read for humans.
 
-            caution: if the argument is set to <stats> | <human>, much
-            more time is needed, because more information is determined
-            and in the <human> mode it has to be processed.
+            If <False> is passed as an argument, the data is converted
+            as far as possible to a human-friendly format so that it
+            can be read without the need for further tools. at the same
+            time, however, care is taken to ensure that it can still be
+            easily imported and used in tools such as pandas in order
+            to waste as little code and time as possible in data preparation.
+
+            See module <os.stat> for more information.
         """
 
         self._root = root
-        self._mode = mode
+        self._raw = raw
         self._data = []
-        self._keys = []
-        self._set_csv_fieldnames()
+        self._keys = ['user_id', 'group_id', 'file_mode', 'device_identifier',
+                      'created_win', 'last_access', 'last_modified',
+                      'file_size', 'path']
         self._stopwatch = None
         # counter
         self._dirs_ix = 0
@@ -164,41 +151,30 @@ class DirectoryScanner:
         :param path: absolute path to a directory or file
         """
 
-        if type(self._mode) == str:
-            if self._mode == 'paths':
-                self._data.append({'path': path})
-            elif self._mode == 'stats' or self._mode == 'human':
-                data = {}
-                stat = os.stat(path)
-                values = [stat.st_uid, stat.st_gid, stat.st_mode,
-                          stat.st_dev]
+        data = {}
+        stat = os.stat(path)
+        values = [stat.st_uid, stat.st_gid, stat.st_mode, stat.st_dev]
 
-                if self._mode == 'stats':
-                    values.extend([stat.st_ctime, stat.st_atime, stat.st_mtime, stat.st_size])
-
-                if self._mode == 'human':
-                    values.extend(
-                        [
-                            # importable with module <datetime.datetime.fromisoformat()>
-                            time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(stat.st_ctime)),
-                            time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(stat.st_atime)),
-                            time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(stat.st_mtime)),
-                            # size in megabyte
-                            '{:09.2f}'.format(stat.st_size / (1024 ** 2)),
-                        ]
-                    )
-
-                values.append(path)
-
-                for key, value in zip(self._keys, values):
-                    data[key] = value
-                else:
-                    self._data.append(data)
-
-            else:
-                raise ValueError('only the following is accepted as input: <paths> | <stats> | <human>')
+        if self._raw:
+            values.extend([stat.st_ctime, stat.st_atime, stat.st_mtime, stat.st_size])
         else:
-            raise TypeError('argument must be a <str>')
+            values.extend(
+                [
+                    # importable with module <datetime.datetime.fromisoformat()>
+                    time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(stat.st_ctime)),
+                    time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(stat.st_atime)),
+                    time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(stat.st_mtime)),
+                    # size in megabyte
+                    '{:09.2f}'.format(stat.st_size / (1024 ** 2)),
+                ]
+            )
+
+        values.append(path)
+
+        for key, value in zip(self._keys, values):
+            data[key] = value
+        else:
+            self._data.append(data)
 
     def _output_results(self):
         """Outputs a small text-based statistic of the result."""
@@ -209,20 +185,6 @@ class DirectoryScanner:
         """Outputs the duration of the scan."""
 
         print('duration of the scan [mm:ss]: {:02}:{:02}'.format(*divmod(round(stopwatch(self._stopwatch)), 60)))
-
-    def _set_csv_fieldnames(self):
-        """Currently only mode <paths> implemented. for this reason private."""
-
-        if self._mode == 'paths':
-            self._keys.append('path')
-        elif self._mode == 'stats' or self._mode == 'human':
-            self._keys.extend(
-                [
-                    'user_id', 'group_id', 'file_mode', 'device_identifier',
-                    'created', 'last_access', 'last_modified', 'file_size',
-                    'path'
-                ]
-            )
 
 
 def csv_writer(file, data, fieldnames):
@@ -267,8 +229,8 @@ def _console():
     parser = argparse.ArgumentParser(prog='m00n')
     parser.add_argument('root', action='store', help='root directory of the scan')
     parser.add_argument('file', action='store', help='file into which the scan is to be written')
-    parser.add_argument('-m', '--mode', action='store', default='human',
-                        help='3 modes are available: <paths> | <stats> | <human> -> default: <human>')
+    parser.add_argument('-r', '--raw', action='store_true',
+                        help='output in raw format -> partly difficult to read for humans -> default: <False>')
     parser.add_argument('-v', '--version', action='version', version='version: {} ({})'.format(
         program_version, program_date
     ))
@@ -280,9 +242,10 @@ def main():
     """Main function of the program."""
 
     args = _console()
+    print(args.raw)
 
     if args.root and args.file:
-        scan = DirectoryScanner(args.root, mode=args.mode)
+        scan = DirectoryScanner(args.root, raw=args.raw)
         data = scan.run()
         fieldnames = scan.get_csv_fieldnames()
         csv_writer(args.file, data, fieldnames)
