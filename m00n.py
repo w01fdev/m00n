@@ -80,6 +80,16 @@ class DirectoryScanner:
         self._dirs_ix = 0
         self._files_ix = 0
 
+    def get_csv_fieldnames(self):
+        """Get a list with the keys of the collected values.
+
+        these can be passed as field names in the <csv> module.
+
+        :return: <list>
+        """
+
+        return self._keys
+
     def get_data(self):
         """Returns the collected data.
 
@@ -120,16 +130,6 @@ class DirectoryScanner:
 
         return self.get_total_counter(), self.get_directory_counter(), self.get_files_counter()
 
-    def get_csv_fieldnames(self):
-        """Get a list with the keys of the collected values.
-
-        these can be passed as field names in the <csv> module.
-
-        :return: <list>
-        """
-
-        return self._keys
-
     def run(self):
         """Starts a forensic scan and returns the data as <dict> in a <list>.
 
@@ -147,13 +147,8 @@ class DirectoryScanner:
                 self._run_path_processing(path)
                 print(path)
         else:
-            self._print_scan_results()
+            self._scan_results()
             return self._data
-
-    def _print_scan_results(self):
-        """Outputs a small text-based statistic of the result."""
-
-        print('\nscan executed: total: {:,} | directories: {:,} | files: {:,}'.format(*self.get_all_counters()))
 
     def _run_path_processing(self, path):
         """Processes the path according to the user input.
@@ -198,6 +193,11 @@ class DirectoryScanner:
                 raise ValueError('only the following is accepted as input: <paths> | <stats> | <human>')
         else:
             raise TypeError('argument must be a <str>')
+
+    def _scan_results(self):
+        """Outputs a small text-based statistic of the result."""
+
+        print('\nscan executed: total: {:,} | directories: {:,} | files: {:,}'.format(*self.get_all_counters()))
 
     def _set_csv_fieldnames(self):
         """Currently only mode <paths> implemented. for this reason private."""
