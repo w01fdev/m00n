@@ -76,6 +76,7 @@ class DirectoryScanner:
         self._data = []
         self._keys = []
         self._set_csv_fieldnames()
+        self._stopwatch = None
         # counter
         self._dirs_ix = 0
         self._files_ix = 0
@@ -136,6 +137,8 @@ class DirectoryScanner:
         :return: <list>
         """
 
+        self._stopwatch = stopwatch()
+
         for self._dir_ix, (root, dirs, files) in enumerate(os.walk(self._root)):
             self._dirs_ix += 1
             self._run_path_processing(root)
@@ -148,6 +151,7 @@ class DirectoryScanner:
                 print(path)
         else:
             self._scan_results()
+            self._output_time()
             return self._data
 
     def _run_path_processing(self, path):
@@ -199,6 +203,11 @@ class DirectoryScanner:
 
         print('\nscan executed: total: {:,} | directories: {:,} | files: {:,}'.format(*self.get_all_counters()))
 
+    def _output_time(self):
+        """Outputs the duration of the scan."""
+
+        print('duration of the scan [mm:ss]: {:02}:{:02}'.format(*divmod(round(stopwatch(self._stopwatch)), 60)))
+
     def _set_csv_fieldnames(self):
         """Currently only mode <paths> implemented. for this reason private."""
 
@@ -232,6 +241,21 @@ def csv_writer(file, data, fieldnames):
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(data)
+
+
+def stopwatch(start=None):
+    """A stopwatch to measure the time of the scan.
+
+    :param start: <float> -> default: <None>
+    :return: <float>
+    """
+
+    if start:
+        return time.perf_counter() - start
+    else:
+        return time.perf_counter()
+
+
 
 
 def _console():
