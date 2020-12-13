@@ -1,7 +1,9 @@
 # m00n
+### terminal-based forensic utility
 
-m00n is a terminal-based forensic utility. It searches the selected 
-path recursively for all or specific files and saves them in a csv file.
+The following has been implemented so far:
+* It searches the selected  path recursively for all or specific files 
+and saves them in a csv file
 
 the main test is the use via a terminal. but m00n should also be usable 
 as a module without any problems.
