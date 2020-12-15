@@ -30,4 +30,4 @@ fck capitalism, fck patriarchy, fck racism, fck animal oppression ...
 program_name = 'm00n'
 program_website = 'https://github.com/w01fdev/m00n'
 program_date = '2020-12-15'
-program_version = '0.1.10'
+program_version = '0.2.1'
