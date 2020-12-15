@@ -68,9 +68,6 @@ class Archiving:
             os.remove(file_or_dir)
             self._output_executed('deleted')
 
-    def _output_executed(self, operation):
-        print('executed: {} {}'.format(self._output, operation))
-
     def get_input_path(self):
         """returns the input path.
 
@@ -102,6 +99,9 @@ class Archiving:
         """
 
         self._output = path
+
+    def _output_executed(self, operation):
+        print('executed: {} {}'.format(self._output, operation))
 
 
 class DirectoryScanner:
