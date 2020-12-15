@@ -2,7 +2,7 @@
 ### terminal-based forensic utility
 
 The following has been implemented so far:
-* It searches the selected  path recursively for all or specific files and saves them in a csv file
+* It searches the selected path recursively for all or specific files and saves them in a csv file
 * archiving as <tar.gz>
 
 the main test is the use via a terminal. but m00n should also be usable 
@@ -24,7 +24,6 @@ optional arguments:
 ```
 
 ## examples of usage
-
 #### save in the program directory:
 * `python w01fm00n.py '/home/user/Pictures/' 'data.csv'`
 
@@ -34,15 +33,5 @@ optional arguments:
 #### further information:
 * see docstrings in w01fm00n.py
 
-## The following implementations are planned:
-* selection of what to search (file extensions ...)
-* text output of statistics
-* graphical output of statistics as images
-* deleting files with specific file extension
-* deleting files with specific file names
-* deleting files with specific file size
-* move or copy specific files to a directory
-* information about the machine (operating system, user ...)
-
-## Perhaps to implement:
-* Standalone executeable (PyInstaller?)
+## planned future implementations and improvements:
+https://github.com/w01fdev/w01fm00n/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement
