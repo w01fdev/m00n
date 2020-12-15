@@ -1,4 +1,4 @@
-# m00n
+# w01fm00n
 ### terminal-based forensic utility
 
 The following has been implemented so far:
@@ -10,7 +10,7 @@ as a module without any problems.
 
 ## syntax
 ```text
-usage: m00n [-h] [-a] [-r] [-v] root file
+usage: w01fm00n [-h] [-a] [-r] [-v] root file
 
 positional arguments:
   root           root directory of the scan
@@ -21,19 +21,18 @@ optional arguments:
   -a, --archive  archive the <.csv> file as <.tar.gz> and then delete it.
   -r, --raw      output in raw format -> partly difficult to read for humans -> default: <False>
   -v, --version  show program's version number and exit
-
 ```
 
 ## examples of usage
 
 #### save in the program directory:
-* `python m00n.py '/home/user/Pictures/' 'data.csv'`
+* `python w01fm00n.py '/home/user/Pictures/' 'data.csv'`
 
 #### save with an absolute path in raw mode as archive:
-* `python m00n.py -r -a '/home/user/Pictures/' '/home/user/m00n/data.csv'`
+* `python w01fm00n.py -r -a '/home/user/Pictures/' '/home/user/m00n/data.csv'`
 
 #### further information:
-* see docstrings in m00n.py
+* see docstrings in w01fm00n.py
 
 ## The following implementations are planned:
 * selection of what to search (file extensions ...)

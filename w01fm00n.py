@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-"""m00n
+"""w01fm00n
 Copyright (C) 2020 w01f - https://github.com/w01fdev/
 
 This program is free software: you can redistribute it and/or modify
@@ -264,7 +264,7 @@ def csv_writer(file, data, fieldnames):
         filename in which the data is to be saved as <.csv>.
         examples:
             <'data.csv'>
-            <'/home/user/m00n/data.csv'>
+            <'/home/user/w01fm00n/data.csv'>
     :param data: <list>
         a list of <dicts> with data from the <directory_scanner>.
     :param fieldnames: <list>
@@ -296,7 +296,7 @@ def _console():
     :return: <class 'argparse.Namespace'>
     """
 
-    parser = argparse.ArgumentParser(prog='m00n')
+    parser = argparse.ArgumentParser(prog='w01fm00n')
     parser.add_argument('root', action='store', help='root directory of the scan')
     parser.add_argument('file', action='store', help='file into which the scan is to be written')
     parser.add_argument('-a', '--archive', action='store_true',
