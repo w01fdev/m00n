@@ -35,7 +35,7 @@ import time
 from modules.program import program_version, program_date
 
 
-class Archive:
+class Archiving:
     """Packing and unpacking files."""
 
     def __init__(self, input_path, output_path='data.tar.gz'):
@@ -321,7 +321,7 @@ def main():
         fieldnames = scan.get_csv_fieldnames()
         csv_writer(args.file, data, fieldnames)
         if args.archive:
-            archive = Archive(args.file)
+            archive = Archiving(args.file)
             archive.create_archive()
             archive.delete()
 
