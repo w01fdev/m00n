@@ -35,75 +35,6 @@ import time
 from modules.program import program_version, program_date
 
 
-class Archiving:
-    """Packing and unpacking files."""
-
-    def __init__(self, input_path, output_path='data.tar.gz'):
-        """Initalisation of the class.
-
-        :param input_path: <str>
-        :param output_path: <str>
-        """
-
-        self._input = input_path
-        self._output = output_path
-
-    def create_archive(self):
-        """A <tar.gz> archive is created."""
-
-        # <file_or_dir> can be a file as well as a directory
-        path, file_or_dir = os.path.split(self._input)
-        # the directory is changed, otherwise the whole path is visible in the archive.
-        os.chdir(path)
-
-        with tarfile.open(self._output, 'w:gz') as tar:
-            tar.add(file_or_dir)
-            self._output_executed('created')
-
-    def delete(self):
-        """Delete the file or directory after creating the archive."""
-
-        if tarfile.is_tarfile(self._output):
-            path, file_or_dir = os.path.split(self._input)
-            os.remove(file_or_dir)
-            self._output_executed('deleted')
-
-    def get_input_path(self):
-        """returns the input path.
-
-        :return: <str>
-        """
-
-        return self._input
-
-    def get_output_path(self):
-        """returns the output path.
-
-        :return: <str>
-        """
-
-        return self._output
-
-    def set_input_path(self, path):
-        """Sets a new input path to a file or directory.
-
-        :param path: <str>
-        """
-
-        self._input = path
-
-    def set_output_path(self, path):
-        """Sets a new output path to a file.
-
-        :param path: <str>
-        """
-
-        self._output = path
-
-    def _output_executed(self, operation):
-        print('executed: {} {}'.format(self._output, operation))
-
-
 class DirectoryScanner:
     """Forensic search for directories and files on the hard drive."""
 
@@ -338,6 +269,75 @@ class Stopwatch:
         return time.strftime('%H:%M:%S', time.gmtime(self._counter))
 
 
+class OutputArchiving:
+    """Packing and unpacking files."""
+
+    def __init__(self, input_path, output_path='data.tar.gz'):
+        """Initalisation of the class.
+
+        :param input_path: <str>
+        :param output_path: <str>
+        """
+
+        self._input = input_path
+        self._output = output_path
+
+    def create_archive(self):
+        """A <tar.gz> archive is created."""
+
+        # <file_or_dir> can be a file as well as a directory
+        path, file_or_dir = os.path.split(self._input)
+        # the directory is changed, otherwise the whole path is visible in the archive.
+        os.chdir(path)
+
+        with tarfile.open(self._output, 'w:gz') as tar:
+            tar.add(file_or_dir)
+            self._output_executed('created')
+
+    def delete(self):
+        """Delete the file or directory after creating the archive."""
+
+        if tarfile.is_tarfile(self._output):
+            path, file_or_dir = os.path.split(self._input)
+            os.remove(file_or_dir)
+            self._output_executed('deleted')
+
+    def get_input_path(self):
+        """returns the input path.
+
+        :return: <str>
+        """
+
+        return self._input
+
+    def get_output_path(self):
+        """returns the output path.
+
+        :return: <str>
+        """
+
+        return self._output
+
+    def set_input_path(self, path):
+        """Sets a new input path to a file or directory.
+
+        :param path: <str>
+        """
+
+        self._input = path
+
+    def set_output_path(self, path):
+        """Sets a new output path to a file.
+
+        :param path: <str>
+        """
+
+        self._output = path
+
+    def _output_executed(self, operation):
+        print('executed: {} {}'.format(self._output, operation))
+
+
 def csv_writer(file, data, fieldnames):
     """Write the data in a file.
 
@@ -389,7 +389,7 @@ def main():
         fieldnames = scan.get_csv_fieldnames()
         csv_writer(args.file, data, fieldnames)
         if args.archive:
-            archive = Archiving(args.file)
+            archive = OutputArchiving(args.file)
             archive.create_archive()
             archive.delete()
 
