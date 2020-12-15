@@ -281,9 +281,12 @@ class OutputArchiving:
 
         self._input = input_path
         self._output = output_path
+        self._stopwatch = Stopwatch('archive created')
 
     def create_archive(self):
         """A <tar.gz> archive is created."""
+
+        self._stopwatch.run()
 
         # <file_or_dir> can be a file as well as a directory
         path, file_or_dir = os.path.split(self._input)
@@ -292,7 +295,7 @@ class OutputArchiving:
 
         with tarfile.open(self._output, 'w:gz') as tar:
             tar.add(file_or_dir)
-            self._output_executed('created')
+            self._stopwatch.run()
 
     def delete(self):
         """Delete the file or directory after creating the archive."""
@@ -335,7 +338,7 @@ class OutputArchiving:
         self._output = path
 
     def _output_executed(self, operation):
-        print('executed: {} {}'.format(self._output, operation))
+        print('executed: <{}> {}'.format(os.path.basename(self._input), operation))
 
 
 def csv_writer(file, data, fieldnames):
