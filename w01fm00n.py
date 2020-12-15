@@ -133,7 +133,7 @@ class DirectoryScanner:
         self._keys = ['user_id', 'group_id', 'file_mode', 'device_identifier',
                       'created_win', 'last_access', 'last_modified',
                       'file_size', 'path']
-        self._stopwatch = None
+        self._stopwatch = Stopwatch('scan')
         # counter
         self._dirs_ix = 0
         self._files_ix = 0
@@ -194,7 +194,7 @@ class DirectoryScanner:
         :return: <list>
         """
 
-        self._stopwatch = stopwatch()
+        self._stopwatch.run()
 
         for self._dir_ix, (root, dirs, files) in enumerate(os.walk(self._root)):
             self._dirs_ix += 1
@@ -210,7 +210,7 @@ class DirectoryScanner:
                 print(path)
         else:
             self._output_results()
-            self._output_time()
+            self._stopwatch.run()
             return self._data
 
     def _run_path_processing(self, path):
@@ -251,10 +251,91 @@ class DirectoryScanner:
 
         print('\nscan executed: total: {:,} | directories: {:,} | files: {:,}'.format(*self.get_all_counters()))
 
-    def _output_time(self):
-        """Outputs the duration of the scan."""
 
-        print('duration of the scan [mm:ss]: {:02}:{:02}'.format(*divmod(round(stopwatch(self._stopwatch)), 60)))
+class Stopwatch:
+    """Measures the time between 2 points."""
+
+    def __init__(self, operation_name=None):
+        """Initalisation of the class.
+
+        :param operation_name: <str>
+            the time [hh:mm:ss] is automatically output in the terminal
+            after the stop if an argument is passed here.
+            Examples -> <scan>, <archiving>, <search>
+        """
+
+        self._counter = 0
+        self._name = operation_name
+
+    def get_counter(self):
+        """Returns the value of the counter
+
+        :return: <float>
+        """
+
+        return self._counter
+
+    def get_operation_name(self):
+        """Get the operation name.
+
+        :return: <str>
+        """
+
+        return self._name
+
+    def reset(self):
+        """Reset the counter."""
+
+        self._counter = 0
+        print('counter reset')
+
+    def run(self):
+        """Starts | ends the stopwatch.
+
+        the method can also be used as start or end. it automatically
+        detects which one applies and determines the time in seconds.
+
+        to avoid confusion, start and end are also available separately
+        as methods.
+        """
+
+        if not self._counter:
+            self.start()
+        else:
+            self.stop()
+
+    def start(self):
+        """Start the stopwatch. more detailed information in method <run>."""
+
+        self._counter = time.perf_counter()
+
+    def set_operation_name(self, name):
+        """Set the operation name.
+
+        :param name: <str>
+        """
+
+        self._name = name
+
+    def stop(self):
+        """Stop the stopwatch. more detailed information in method <run>."""
+
+        self._counter = time.perf_counter() - self._counter
+        if self._name:
+            self._output_duration()
+
+    def _output_duration(self):
+        """Output of the duration with simple change of the operation text."""
+
+        print('duration of the {}: {} [hh:mm:ss]'.format(self._name, self._seconds_to_hhmmss()))
+
+    def _seconds_to_hhmmss(self):
+        """Converts seconds to hh:mm:ss.
+
+        :return: <str>
+        """
+
+        return time.strftime('%H:%M:%S', time.gmtime(self._counter))
 
 
 def csv_writer(file, data, fieldnames):
@@ -275,19 +356,6 @@ def csv_writer(file, data, fieldnames):
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(data)
-
-
-def stopwatch(start=None):
-    """A stopwatch to measure the time of the scan.
-
-    :param start: <float> -> default: <None>
-    :return: <float>
-    """
-
-    if start:
-        return time.perf_counter() - start
-    else:
-        return time.perf_counter()
 
 
 def _console():
