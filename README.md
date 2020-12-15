@@ -2,8 +2,8 @@
 ### terminal-based forensic utility
 
 The following has been implemented so far:
-* It searches the selected  path recursively for all or specific files 
-and saves them in a csv file
+* It searches the selected  path recursively for all or specific files and saves them in a csv file
+* archiving as <tar.gz>
 
 the main test is the use via a terminal. but m00n should also be usable 
 as a module without any problems.
@@ -43,7 +43,6 @@ optional arguments:
 * deleting files with specific file names
 * deleting files with specific file size
 * move or copy specific files to a directory
-* pack files as archive
 * information about the machine (operating system, user ...)
 
 ## Perhaps to implement:
