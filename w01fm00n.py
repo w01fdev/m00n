@@ -269,8 +269,8 @@ class Stopwatch:
         return time.strftime('%H:%M:%S', time.gmtime(self._counter))
 
 
-class OutputArchiving:
-    """Packing and unpacking files."""
+class DataArchiving:
+    """Packing and unpacking files | directories."""
 
     def __init__(self, input_path, output_path='data.tar.gz'):
         """Initalisation of the class.
@@ -392,7 +392,7 @@ def main():
         fieldnames = scan.get_csv_fieldnames()
         csv_writer(args.file, data, fieldnames)
         if args.archive:
-            archive = OutputArchiving(args.file)
+            archive = DataArchiving(args.file)
             archive.create_archive()
             archive.delete()
 
