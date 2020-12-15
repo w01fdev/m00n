@@ -10,7 +10,7 @@ as a module without any problems.
 
 ## syntax
 ```text
-usage: m00n [-h] [-r] [-v] root file
+usage: m00n [-h] [-a] [-r] [-v] root file
 
 positional arguments:
   root           root directory of the scan
@@ -18,8 +18,10 @@ positional arguments:
 
 optional arguments:
   -h, --help     show this help message and exit
+  -a, --archive  archive the <.csv> file as <.tar.gz> and then delete it.
   -r, --raw      output in raw format -> partly difficult to read for humans -> default: <False>
   -v, --version  show program's version number and exit
+
 ```
 
 ## examples of usage
@@ -27,8 +29,8 @@ optional arguments:
 #### save in the program directory:
 * `python m00n.py '/home/user/Pictures/' 'data.csv'`
 
-#### save with an absolute path in raw mode:
-* `python m00n.py -r '/home/user/Pictures/' '/home/user/m00n/data.csv'`
+#### save with an absolute path in raw mode as archive:
+* `python m00n.py -r -a '/home/user/Pictures/' '/home/user/m00n/data.csv'`
 
 #### further information:
 * see docstrings in m00n.py

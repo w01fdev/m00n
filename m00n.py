@@ -29,9 +29,79 @@ fck capitalism, fck patriarchy, fck racism, fck animal oppression ...
 import argparse
 import csv
 import os
+import tarfile
 import time
 
 from modules.program import program_version, program_date
+
+
+class Archive:
+    """Packing and unpacking files."""
+
+    def __init__(self, input_path, output_path='data.tar.gz'):
+        """Initalisation of the class.
+
+        :param input_path: <str>
+        :param output_path: <str>
+        """
+
+        self._input = input_path
+        self._output = output_path
+
+    def create_archive(self):
+        """A <tar.gz> archive is created."""
+
+        # <file_or_dir> can be a file as well as a directory
+        path, file_or_dir = os.path.split(self._input)
+        # the directory is changed, otherwise the whole path is visible in the archive.
+        os.chdir(path)
+
+        with tarfile.open(self._output, 'w:gz') as tar:
+            tar.add(file_or_dir)
+            self._output_executed('created')
+
+    def delete(self):
+        """Delete the file or directory after creating the archive."""
+
+        if tarfile.is_tarfile(self._output):
+            path, file_or_dir = os.path.split(self._input)
+            os.remove(file_or_dir)
+            self._output_executed('deleted')
+
+    def _output_executed(self, operation):
+        print('executed: {} {}'.format(self._output, operation))
+
+    def get_input_path(self):
+        """returns the input path.
+
+        :return: <str>
+        """
+
+        return self._input
+
+    def get_output_path(self):
+        """returns the output path.
+
+        :return: <str>
+        """
+
+        return self._output
+
+    def set_input_path(self, path):
+        """Sets a new input path to a file or directory.
+
+        :param path: <str>
+        """
+
+        self._input = path
+
+    def set_output_path(self, path):
+        """Sets a new output path to a file.
+
+        :param path: <str>
+        """
+
+        self._output = path
 
 
 class DirectoryScanner:
@@ -229,6 +299,8 @@ def _console():
     parser = argparse.ArgumentParser(prog='m00n')
     parser.add_argument('root', action='store', help='root directory of the scan')
     parser.add_argument('file', action='store', help='file into which the scan is to be written')
+    parser.add_argument('-a', '--archive', action='store_true',
+                        help='archive the <.csv> file as <.tar.gz> and then delete it.')
     parser.add_argument('-r', '--raw', action='store_true',
                         help='output in raw format -> partly difficult to read for humans -> default: <False>')
     parser.add_argument('-v', '--version', action='version', version='version: {} ({})'.format(
@@ -248,6 +320,10 @@ def main():
         data = scan.run()
         fieldnames = scan.get_csv_fieldnames()
         csv_writer(args.file, data, fieldnames)
+        if args.archive:
+            archive = Archive(args.file)
+            archive.create_archive()
+            archive.delete()
 
 
 if __name__ == '__main__':
