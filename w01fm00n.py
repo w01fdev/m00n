@@ -38,13 +38,17 @@ from modules.program import program_version, program_date
 class DirectoryScanner:
     """Forensic search for directories and files on the hard drive."""
 
-    def __init__(self, root, raw=False):
+    def __init__(self, root, file, raw=False):
         """Initalisation of the class.
 
         :param root: <str>
             the root directory from which the scan should start.
+        :param file: <str>
+            here the file is specified where the data is to be saved in
+            <.csv> format. a complete path can be specified or only a
+            file name with extension. it is important that the
+            extension is <.csv>.
         :param raw: <bool> -> default: <False>
-
             if the argument is set to <True>, the data is stored in
             raw mode. this is sometimes difficult to read for humans.
 
@@ -59,8 +63,8 @@ class DirectoryScanner:
         """
 
         self._root = root
+        self._file = file
         self._raw = raw
-        self._data = []
         self._keys = ['user_id', 'group_id', 'file_mode', 'device_identifier',
                       'created_win', 'last_access', 'last_modified',
                       'file_size', 'path']
@@ -68,24 +72,6 @@ class DirectoryScanner:
         # counter
         self._dirs_ix = 0
         self._files_ix = 0
-
-    def get_csv_fieldnames(self):
-        """Get a list with the keys of the collected values.
-
-        these can be passed as field names in the <csv> module.
-
-        :return: <list>
-        """
-
-        return self._keys
-
-    def get_data(self):
-        """Returns the collected data.
-
-        :return: <list>
-        """
-
-        return self._data
 
     def get_directory_counter(self):
         """Returns the directory counter.
@@ -127,6 +113,10 @@ class DirectoryScanner:
 
         self._stopwatch.run()
 
+        file = open(self._file, 'w', newline='')
+        writer = csv.DictWriter(file, fieldnames=self._keys)
+        writer.writeheader()
+
         for self._dir_ix, (root, dirs, files) in enumerate(os.walk(self._root)):
             self._dirs_ix += 1
             print(root)
@@ -135,14 +125,14 @@ class DirectoryScanner:
                 self._files_ix += 1
                 path = os.path.join(root, filename)
                 try:
-                    self._run_path_processing(path)
+                    data = self._run_path_processing(path)
                 except FileNotFoundError:
                     continue
+                writer.writerow(data)
                 print(path)
         else:
             self._output_results()
             self._stopwatch.run()
-            return self._data
 
     def _run_path_processing(self, path):
         """Processes the path according to the user input.
@@ -175,7 +165,7 @@ class DirectoryScanner:
         for key, value in zip(self._keys, values):
             data[key] = value
         else:
-            self._data.append(data)
+            return data
 
     def _output_results(self):
         """Outputs a small text-based statistic of the result."""
@@ -341,26 +331,6 @@ class FileArchiving:
         print('executed: <{}> {}'.format(os.path.basename(self._input), operation))
 
 
-def csv_writer(file, data, fieldnames):
-    """Write the data in a file.
-
-    :param file: <str>
-        filename in which the data is to be saved as <.csv>.
-        examples:
-            <'data.csv'>
-            <'/home/user/w01fm00n/data.csv'>
-    :param data: <list>
-        a list of <dicts> with data from the <directory_scanner>.
-    :param fieldnames: <list>
-        a list containing field names.
-    """
-
-    with open(file, 'w', newline='') as csv_file:
-        writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
-        writer.writeheader()
-        writer.writerows(data)
-
-
 def _console():
     """Arguments for control via the console.
 
@@ -387,10 +357,8 @@ def main():
     args = _console()
 
     if args.root and args.file:
-        scan = DirectoryScanner(args.root, raw=args.raw)
-        data = scan.run()
-        fieldnames = scan.get_csv_fieldnames()
-        csv_writer(args.file, data, fieldnames)
+        scan = DirectoryScanner(args.root, args.file, raw=args.raw)
+        scan.run()
         if args.archive:
             archive = FileArchiving(args.file)
             archive.create_archive()
