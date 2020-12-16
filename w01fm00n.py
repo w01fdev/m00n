@@ -63,7 +63,9 @@ class DirectoryScanner:
         """
 
         self._root = root
+        self._exceptions_root()
         self._file = file
+        self._exceptions_file()
         self._raw = raw
         self._keys = ['user_id', 'group_id', 'file_mode', 'device_identifier',
                       'created_win', 'last_access', 'last_modified',
@@ -134,6 +136,39 @@ class DirectoryScanner:
             self._output_results()
             self._stopwatch.run()
 
+    def _exceptions_file(self):
+        """Exception errors for argument <file> | <self._file>."""
+
+        path = os.path.dirname(self._file)
+        _, ext = os.path.splitext(self._file)
+
+        if type(self._file) == str:
+            if not ext == '.csv':
+                raise ValueError('file extension must be <.csv>.')
+            if path and not os.access(path, os.W_OK):
+                raise PermissionError('no access')
+        else:
+            raise TypeError('argument must be type <str>')
+
+    def _exceptions_root(self):
+        """Exception errors for argument <root> | <self._root>."""
+
+        if type(self._root) == str:
+            if os.path.exists(self._root):
+                if not os.path.isdir(self._root):
+                    raise NotADirectoryError('<root> must be a directory')
+                if not os.access(self._root, os.R_OK):
+                    raise PermissionError('no access')
+            else:
+                raise NotADirectoryError('directory does not exist')
+        else:
+            raise TypeError('argument must be type <str>')
+
+    def _output_results(self):
+        """Outputs a small text-based statistic of the result."""
+
+        print('\nscan executed: total: {:,} | directories: {:,} | files: {:,}'.format(*self.get_all_counters()))
+
     def _run_path_processing(self, path):
         """Processes the path according to the user input.
 
@@ -166,11 +201,6 @@ class DirectoryScanner:
             data[key] = value
         else:
             return data
-
-    def _output_results(self):
-        """Outputs a small text-based statistic of the result."""
-
-        print('\nscan executed: total: {:,} | directories: {:,} | files: {:,}'.format(*self.get_all_counters()))
 
 
 class Stopwatch:
