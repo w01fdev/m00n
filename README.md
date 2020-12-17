@@ -1,11 +1,7 @@
 # w01fm00n
 ### terminal-based forensic utility
 
-The following has been implemented so far:
-* It searches the selected path recursively for all or specific files and saves them in a csv file
-* archiving as <tar.gz>
-
-the main test is the use via a terminal. but m00n should also be usable 
+the main test is the use via a terminal, but m00n should also be usable 
 as a module without any problems.
 
 ## syntax
