@@ -48,12 +48,17 @@ setup(
     packages=['w01fm00n', ],
     python_requires='>=3.3',
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 5 - Production/Stable',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
-    ]
+    ],
+    entry_points={
+        "console_scripts": [
+            "w01fm00n=w01fm00n:main",
+        ],
+    },
 )

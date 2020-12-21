@@ -3,5 +3,6 @@ build/
 dist/
 venv/
 secret/
+.egg-info/
 .idea
 db.sqlite3

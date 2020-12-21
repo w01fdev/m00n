@@ -311,7 +311,8 @@ class FileArchiving:
         # <file_or_dir> can be a file as well as a directory
         path, file_or_dir = os.path.split(self._input)
         # the directory is changed, otherwise the whole path is visible in the archive.
-        os.chdir(path)
+        if path:
+            os.chdir(path)
 
         with tarfile.open(self._output, 'w:gz') as tar:
             tar.add(file_or_dir)
