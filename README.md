@@ -28,7 +28,7 @@ optional arguments:
 `w01fm00n '/home/user/Pictures/' 'data.csv'`
 
 #### save with an absolute path in raw mode as archive:
-`w01fm00n.py -r -a '/home/user/Pictures/' '/home/user/m00n/data.csv'`
+`w01fm00n -r -a '/home/user/Pictures/' '/home/user/m00n/data.csv'`
 
 ### github package
 #### save in the program directory:
