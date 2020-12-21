@@ -26,7 +26,8 @@ fck capitalism, fck patriarchy, fck racism, fck animal oppression ...
 """
 
 
-from w01fm00n.w01fm00n import main
+from w01fm00n.main import main
+
 
 if __name__ == '__main__':
     main()

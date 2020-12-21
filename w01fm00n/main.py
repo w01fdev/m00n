@@ -394,7 +394,3 @@ def main():
             archive = FileArchiving(args.file)
             archive.create_archive()
             archive.delete()
-
-
-if __name__ == '__main__':
-    main()
