@@ -31,5 +31,5 @@ program_name = 'w01fm00n'
 program_hackers = ['w01f', ]
 program_website = 'https://github.com/w01fdev/w01fm00n'
 program_license = 'GPL-3.0'
-program_date = '2020-12-19'
-program_version = '0.2.15'
+program_date = '2020-12-21'
+program_version = '0.2.16'

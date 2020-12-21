@@ -1,4 +1,7 @@
-venv
-secret
+__pycache__/
+build/
+dist/
+venv/
+secret/
 .idea
 db.sqlite3
