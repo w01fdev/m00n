@@ -32,7 +32,7 @@ import os
 import tarfile
 import time
 
-from .program import program_version, program_date
+from .program import DATE, VERSION
 
 
 class DirectoryScanner:
@@ -57,7 +57,8 @@ class DirectoryScanner:
             can be read without the need for further tools. at the same
             time, however, care is taken to ensure that it can still be
             easily imported and used in tools such as pandas in order
-            to waste as little code and time as possible in data preparation.
+            to waste as little code and time as possible in data
+            preparation.
 
             See module <os.stat> for more information.
         """
@@ -72,7 +73,7 @@ class DirectoryScanner:
                       'file_size', 'path']
         self._stopwatch = Stopwatch('scan')
         # counter
-        self._dirs_ix = 0
+        self._dir_ix = 0
         self._files_ix = 0
 
     def get_directory_counter(self):
@@ -81,7 +82,7 @@ class DirectoryScanner:
         :return: <int>
         """
 
-        return self._dirs_ix
+        return self._dir_ix
 
     def get_files_counter(self):
         """Returns the files counter.
@@ -97,7 +98,7 @@ class DirectoryScanner:
         :return: <int>
         """
 
-        return self._dirs_ix + self._files_ix
+        return self._dir_ix + self._files_ix
 
     def get_all_counters(self):
         """Returns all counters in a list (total, directories, files).
@@ -119,8 +120,7 @@ class DirectoryScanner:
         writer = csv.DictWriter(file, fieldnames=self._keys)
         writer.writeheader()
 
-        for self._dir_ix, (root, dirs, files) in enumerate(os.walk(self._root)):
-            self._dirs_ix += 1
+        for self._dir_ix, (root, _, files) in enumerate(os.walk(self._root), start=1):
             print(root)
 
             for filename in files:
@@ -132,9 +132,9 @@ class DirectoryScanner:
                     continue
                 writer.writerow(data)
                 print(path)
-        else:
-            self._output_results()
-            self._stopwatch.run()
+
+        self._output_results()
+        self._stopwatch.run()
 
     def _exceptions_file(self):
         """Exception errors for argument <file> | <self._file>."""
@@ -142,7 +142,7 @@ class DirectoryScanner:
         path = os.path.dirname(self._file)
         _, ext = os.path.splitext(self._file)
 
-        if type(self._file) == str:
+        if isinstance(self._file, str):
             if not ext == '.csv':
                 raise ValueError('file extension must be <.csv>.')
             if path and not os.access(path, os.W_OK):
@@ -153,7 +153,7 @@ class DirectoryScanner:
     def _exceptions_root(self):
         """Exception errors for argument <root> | <self._root>."""
 
-        if type(self._root) == str:
+        if isinstance(self._root, str):
             if os.path.exists(self._root):
                 if not os.path.isdir(self._root):
                     raise NotADirectoryError('<root> must be a directory')
@@ -167,7 +167,8 @@ class DirectoryScanner:
     def _output_results(self):
         """Outputs a small text-based statistic of the result."""
 
-        print('\nscan executed: total: {:,} | directories: {:,} | files: {:,}'.format(*self.get_all_counters()))
+        text = '\nscan executed: total: {:,} | directories: {:,} | files: {:,}'
+        print(text.format(*self.get_all_counters()))
 
     def _run_path_processing(self, path):
         """Processes the path according to the user input.
@@ -199,8 +200,8 @@ class DirectoryScanner:
 
         for key, value in zip(self._keys, values):
             data[key] = value
-        else:
-            return data
+
+        return data
 
 
 class Stopwatch:
@@ -322,7 +323,7 @@ class FileArchiving:
         """Delete the file or directory after creating the archive."""
 
         if tarfile.is_tarfile(self._output):
-            path, file_or_dir = os.path.split(self._input)
+            _, file_or_dir = os.path.split(self._input)
             os.remove(file_or_dir)
             self._output_executed('deleted')
 
@@ -374,9 +375,9 @@ def _console():
     parser.add_argument('-a', '--archive', action='store_true',
                         help='archive the <.csv> file as <.tar.gz> and then delete it.')
     parser.add_argument('-r', '--raw', action='store_true',
-                        help='output in raw format -> partly difficult to read for humans -> default: <False>')
+                        help='output in raw format -> partly difficult to read for humans')
     parser.add_argument('-v', '--version', action='version', version='version: {} ({})'.format(
-        program_version, program_date
+        VERSION, DATE
     ))
 
     return parser.parse_args()
