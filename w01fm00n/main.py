@@ -185,16 +185,11 @@ class DirectoryScanner:
         if self._raw:
             values.extend([stat.st_ctime, stat.st_atime, stat.st_mtime, stat.st_size])
         else:
-            values.extend(
-                [
-                    # importable with module <datetime.datetime.fromisoformat()>
-                    time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(stat.st_ctime)),
-                    time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(stat.st_atime)),
-                    time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(stat.st_mtime)),
-                    # size in megabyte
-                    '{:09.2f}'.format(stat.st_size / (1024 ** 2)),
-                ]
-            )
+            for x in (stat.st_ctime, stat.st_atime, stat.st_mtime):
+                # importable with module <datetime.datetime.fromisoformat()>
+                values.append(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(x)))
+            # size in megabyte
+            values.append('{:09.2f}'.format(stat.st_size / (1024 ** 2)))
 
         values.append(path)
 
