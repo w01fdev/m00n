@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """w01fm00n
 Copyright (C) 2020 w01f - https://github.com/w01fdev/
 

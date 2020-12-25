@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """w01fm00n
 Copyright (C) 2020 w01f - https://github.com/w01fdev/

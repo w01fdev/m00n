@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """w01fm00n
 Copyright (C) 2020 w01f - https://github.com/w01fdev/
 
@@ -27,9 +25,9 @@ fck capitalism, fck patriarchy, fck racism, fck animal oppression ...
 
 
 # constants
-NAME = 'w01fm00n'
+DATE = '2020-12-25'
 HACKERS = ['w01f', ]
-URL = 'https://github.com/w01fdev/w01fm00n'
 LICENSE = 'GPL-3.0'
-DATE = '2020-12-22'
-VERSION = '0.3.4'
+NAME = 'w01fm00n'
+URL = 'https://github.com/w01fdev/w01fm00n'
+VERSION = '0.3.5'
