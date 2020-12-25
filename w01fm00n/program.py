@@ -30,4 +30,4 @@ HACKERS = ['w01f', ]
 LICENSE = 'GPL-3.0'
 NAME = 'w01fm00n'
 URL = 'https://github.com/w01fdev/w01fm00n'
-VERSION = '0.3.5'
+VERSION = '0.3.6'

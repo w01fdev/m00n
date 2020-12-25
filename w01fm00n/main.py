@@ -143,7 +143,7 @@ class DirectoryScanner:
         _, ext = os.path.splitext(self._file)
 
         if isinstance(self._file, str):
-            if not ext == '.csv':
+            if ext != '.csv':
                 raise ValueError('file extension must be <.csv>.')
             if path and not os.access(path, os.W_OK):
                 raise PermissionError('no access')
