@@ -25,9 +25,11 @@ fck capitalism, fck patriarchy, fck racism, fck animal oppression ...
 
 
 # constants
-DATE = '2020-12-25'
+DATE = '2020-12-27'
+DESCRIPTION = '''terminal-based forensic utility'''
+EMAIL = 'w01f@w01f.dev'
 HACKERS = ['w01f', ]
 LICENSE = 'GPL-3.0'
 NAME = 'w01fm00n'
 URL = 'https://github.com/w01fdev/w01fm00n'
-VERSION = '0.3.6'
+VERSION = '0.3.7'

@@ -26,8 +26,8 @@ fck capitalism, fck patriarchy, fck racism, fck animal oppression ...
 
 from setuptools import setup
 
-from w01fm00n.program import (VERSION, HACKERS, NAME,
-                              LICENSE, URL)
+from w01fm00n.program import (VERSION, HACKERS, NAME, DESCRIPTION,
+                              LICENSE, URL, EMAIL)
 
 
 with open("README.md", "r", encoding="utf-8") as fh:
@@ -38,10 +38,10 @@ setup(
     name=NAME,
     version=VERSION,
     author=HACKERS[0],
-    author_email='w01f@w01f.dev',
+    author_email=EMAIL,
     url=URL,
     license=LICENSE,
-    description='terminal-based forensic utility',
+    description=DESCRIPTION,
     long_description=long_description,
     long_description_content_type="text/markdown",
     packages=['w01fm00n', ],
